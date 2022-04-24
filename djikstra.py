@@ -1,6 +1,3 @@
-from operator import truediv
-from platform import node
-import queue
 from nodeClass import Node
 from cmath import sqrt
 def mesaureDist(node0 : Node, node1 : Node):
@@ -27,7 +24,8 @@ def djikstra(start, goal):
             if connection not in currentNode.backPointer:
                 sentBy.append(currentNode)
                 queue.append(connection)
-def findShortestRoute(start : Node, goal : Node):
+                
+def shortestRoute(start : Node, goal : Node):
     djikstra(start, goal)
     listToReturn = []
     currentNode = goal
@@ -49,4 +47,4 @@ if __name__ == "__main__":
 
 
     #djikstra(n0, n2)
-    print(findShortestRoute(n0,n2))
+    print(shortestRoute(n0,n2))

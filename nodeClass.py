@@ -1,5 +1,4 @@
 from cmath import sqrt
-from platform import node
 
 class Node:
     def __init__(self, id, posX, posY):
@@ -29,12 +28,6 @@ class Node:
         stringToReturn = str(self.id)
         return stringToReturn
     
-def mesaureDist(node0 : Node, node1 : Node):
-    a = node1.pos[0]-node0.pos[0]
-    a = a * a
-    b = node1.pos[1]-node0.pos[1]
-    b = b * b
-    return sqrt(a+b).real
 def addChild(node, newConnection):
     node.connectedNodes = node.connectedNodes + [newConnection]
     node.cost.append(mesaureDist(node, newConnection))
