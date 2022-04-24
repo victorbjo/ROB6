@@ -15,11 +15,9 @@ class Node:
         if isinstance(newConnection, list):
             self.connectedNodes = self.connectedNodes + newConnection
             for node in newConnection:
-                self.cost.append(mesaureDist(self, node))
                 addChild(node, self)
         else:
             self.connectedNodes = self.connectedNodes + [newConnection]
-            self.cost.append(mesaureDist(self, newConnection))
             addChild(newConnection, self)
     def __str__(self):
         stringToReturn = str(self.pos)
@@ -30,4 +28,3 @@ class Node:
     
 def addChild(node, newConnection):
     node.connectedNodes = node.connectedNodes + [newConnection]
-    node.cost.append(mesaureDist(node, newConnection))
