@@ -1,6 +1,6 @@
 from nodeClass import Node
 from cmath import sqrt
-def mesaureDist(node0 : Node, node1 : Node):
+def mesaureDist(node0 : Node, node1 : Node): # Measure the distance between two nodes using pythagoras theorem
     a = node1.pos[0]-node0.pos[0]
     a = a * a
     b = node1.pos[1]-node0.pos[1]
