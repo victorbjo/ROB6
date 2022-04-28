@@ -1,50 +1,51 @@
-from nodeClass import Node
-from cmath import sqrt
-def mesaureDist(node0 : Node, node1 : Node):
-    a = node1.pos[0]-node0.pos[0]
-    a = a * a
-    b = node1.pos[1]-node0.pos[1]
-    b = b * b
-    return abs(sqrt(a+b).real)
-def djikstra(start, goal):
-    queue  : list[Node] = [start]
-    sentBy : list[Node] = [start]
-    while queue:
-        currentNode = queue.pop(0)
-        sentByNode = sentBy.pop(0)
-        currentNode.backPointer.append(sentByNode)
-        newCost = sentByNode.accumCost + mesaureDist(sentByNode, currentNode)
-        if newCost > currentNode.accumCost and currentNode.accumCost != 0:
-            continue
-        currentNode.cheapestBack = sentByNode
-        currentNode.accumCost = newCost
-        if currentNode == goal:
-            continue
-        for connection in currentNode.connectedNodes:
-            if connection not in currentNode.backPointer:
-                sentBy.append(currentNode)
-                queue.append(connection)
-                
-def shortestRoute(start : Node, goal : Node):
-    djikstra(start, goal)
-    listToReturn = []
-    currentNode = goal
-    while True:
-        listToReturn.append(currentNode)
-        if currentNode == start:
-            listToReturn.reverse()
-            return listToReturn
-        currentNode = currentNode.cheapestBack
+from ctypes.wintypes import MSG
+from re import sub
+from turtle import delay
+import rospy
+from geometry_msgs.msg import PoseStamped
+import matplotlib.pyplot as plt
+from matplotlib import image
 
-if __name__ == "__main__":
-    n0 = Node("a",0,0)
-    n1 = Node("b",2,0)
-    n2 = Node("c",3,1)
-    n3 = Node("d",2,1)
-    n0.addChild([n1, n3])
-    n1.addChild([n2, n3])
-    n2.addChild(n3)
+img = image.imread("/home/jimmi/catkin_ws/src/mir_robot/ROB6/Lab1.png")
+
+print(img)
+
+plt.plot(img,"aa")
+plt.show()
+
+pub = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=10)
+rospy.init_node("move")
+
+def goTo(x,y, x_rot,y_rot,z_rot,w_rot):
+    goal = PoseStamped()
+    goal.header.seq = 0
+    goal.header.stamp = rospy.Time.now()
+    goal.header.frame_id = "map"
 
 
-    #djikstra(n0, n2)
-    print(shortestRoute(n0,n2))
+
+    goal.pose.position.x = x
+    goal.pose.position.y = y
+    goal.pose.position.z = 0
+
+    goal.pose.orientation.x = x_rot
+    goal.pose.orientation.y = y_rot
+    goal.pose.orientation.z = z_rot
+    goal.pose.orientation.w = w_rot
+    
+    delay(2)
+
+    pub.publish(goal)
+
+
+a = (108*0.05, (636-238)*0.05)
+b = (210*0.05, (636-412)*0.05)
+c = (145*0.05, (636-308)*0.05)
+d = (153*0.05, (636-261)*0.05)
+
+#goTo(5.140, 19.728, 0.0,
+#     0.0, 0.0, -0.475, 0.880)
+
+#rospy.spin()
+
+
