@@ -26,7 +26,7 @@ def makeLine(imgOld, x0, y0, x1, y1): # Creates line between two different sets 
         return True
     return False
 
-def getRPoint(img):
+def getRPoint(img): #Takes the .shape of the img to get all the coordinates in a vector and finds random x and y point 
     shape = img.shape
     randomX = random.randint(0, shape[0])
     randomY = random.randint(0, shape[1])
