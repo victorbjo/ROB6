@@ -32,7 +32,9 @@ def getRPoint(img): #Takes the .shape of the img to get all the width and height
     randomY = random.randint(0, shape[1])
     return(randomX, randomY)
 
-def getAngle(node, point, stepSize):
+# Stepsize is the length between the start and end of a line
+
+def getAngle(node, point, stepSize): 
     try:
         p =  geo.Point(node.pos[0], node.pos[1])
         tempLine = geo.LineString([geo.Point(point[0], point[1]),p])
