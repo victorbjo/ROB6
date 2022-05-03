@@ -10,7 +10,7 @@ def mesaureDist(node0 : Node, node1 : Node): # Measure the distance between two 
     b = node1.pos[1]-node0.pos[1]
     b = b * b
     return abs(math.sqrt(a+b).real)
-def checkLine(imgNew, imgOld):
+def checkLine(imgNew, imgOld): # Check if the line on the current map is placed on a grey/dark pixel on the old map
     for idx, row in enumerate(imgNew):
         for idy, pixel in enumerate(row):
             if (pixel[0] == 255):
