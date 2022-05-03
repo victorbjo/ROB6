@@ -34,7 +34,7 @@ def getRPoint(img): #Takes the .shape of the img to get all the width and height
 
 # Stepsize is the length between the start and end of a line
 
-def getAngle(node, point, stepSize): 
+def createNewPoint(node, point, stepSize): #
     try:
         p =  geo.Point(node.pos[0], node.pos[1])
         tempLine = geo.LineString([geo.Point(point[0], point[1]),p])
@@ -61,7 +61,7 @@ def RTT(node, goal, img, stepSize = 30):
     while i  < 100:
         newCoords = getRPoint(img)
         _nearestNode = nearestNode(nodes, newCoords)
-        x, y = getAngle(_nearestNode, newCoords, stepSize)
+        x, y = createNewPoint(_nearestNode, newCoords, stepSize)
         nodes.append(Node("N/A", int(x), int(y)))
         i = i + 1
         if not makeLine(img, _nearestNode.pos[0], _nearestNode.pos[1], nodes[-1].pos[0], nodes[-1].pos[1]):
