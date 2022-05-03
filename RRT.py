@@ -17,7 +17,7 @@ def checkLine(imgNew, imgOld): # Check if the line on the current map is placed 
                 if (imgOld[idx][idy][0] == 205 or imgOld[idx][idy][0] == 0):
                     return False
     return True
-def makeLine(imgOld, x0, y0, x1, y1):
+def makeLine(imgOld, x0, y0, x1, y1): # Creates line between two different sets of (x,y) coordinates on the new map
     color = (255, 0, 0)
     newImage = imgOld.copy()
     cv2.line(newImage, (x0,y0),(x1,y1), color, 5)
