@@ -3,11 +3,11 @@ from cmath import sqrt
 class Node:
     def __init__(self, id, posX, posY):
         self.id = id
-        self.goal = None
+        self.goal = None # not used
         self.pos = [posX, posY]
         self.connectedNodes = []
-        self.cost = []
-        self.route = []
+        self.cost = [] # not used
+        self.route = [] # not used
         self.accumCost = 0
         self.backPointer = []
         self.cheapestBack = None
