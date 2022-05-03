@@ -34,9 +34,9 @@ def getRPoint(img): #Takes the .shape of the img to get all the width and height
 
 # Stepsize is the length between the start and end of a line
 
-def createLineToNewPoint(node, point, stepSize): #
-    try:
-        p =  geo.Point(node.pos[0], node.pos[1])
+def createLineToNewPoint(node, point, stepSize): # takes the random generated x,y point (node) and current x,y point (point) and creates a temporary line between.
+    try:                                         # a circle (radius of stepSize) is created and the coordinate for its intersection with the tempLine is found. 
+        p =  geo.Point(node.pos[0], node.pos[1]) # A permanent line is created between the current point and the intersection point.
         tempLine = geo.LineString([geo.Point(point[0], point[1]),p])
         circle = p.buffer(stepSize)
         intersection = circle.intersection(tempLine)
