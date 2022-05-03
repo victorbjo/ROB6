@@ -100,14 +100,32 @@ hold on
 %plot (x_r)
 %plot (y_r)
 
-point1 = [x_r(1); y_r(1)]
-point2 = [x_r(3); y_r(3)]
-point3 = [x_r(5); y_r(5)]
+
+syms t omega r real
+x = [a*t^3 + b*t^2 + c*t + d, a1*t^3 + b1*t^2 + c1*t + d1]
+dx=jacobian(x,t)
+ws=norm(dx)
+simplify(ws)
+%ws = (abs(t/2 + 0)^2 + abs(t/2-1)^2^(1/2))
+
+omegaS = (abs(T/2 + 0).^2 + abs(T/2-1).^2.^(1/2))
+
+mean(omegaS)
+
+point1 = [x_r(10); y_r(10)]
+point2 = [x_r(20); y_r(20)]
+point3 = [x_r(30); y_r(30)]
 
 
 vector1 = point2-point1
 vector2 = point3-point2
 
+dh = vector2-vector1
+dh = dh / norm(dh)
+R = [0,-1;1,0];
+
+
+w_m = dot(dh,R*vector1/norm(vector1))
 
 plot (point1(1),point1(2), '.', 'markersize', 8)
 plot (point2(1),point2(2),'.', 'markersize',8)
