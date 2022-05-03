@@ -34,9 +34,9 @@ def getRPoint(img): #Takes the .shape of the img to get all the width and height
 
 # Stepsize is the length between the start and end of a line
 
-def createLineToNewPoint(node, point, stepSize): #
-    try:
-        p =  geo.Point(node.pos[0], node.pos[1])
+def createLineToNewPoint(node, point, stepSize): # takes the random generated x,y point (node) and current x,y point (point) and creates a temporary line between.
+    try:                                         # a circle (radius of stepSize) is created and the coordinate for its intersection with the tempLine is found. 
+        p =  geo.Point(node.pos[0], node.pos[1]) # A permanent line is created between the current point and the intersection point.
         tempLine = geo.LineString([geo.Point(point[0], point[1]),p])
         circle = p.buffer(stepSize)
         intersection = circle.intersection(tempLine)
@@ -45,7 +45,7 @@ def createLineToNewPoint(node, point, stepSize): #
     except:
         return (point)
 
-def nearestNode(nodes, point):
+def nearestNode(nodes, point): # Iterates through each node generated and measure distance to them from the current node, save all distances in list and find node minimum distance
     distList = []
     tempNode = Node("Temp", point[0], point[1])
     for node in nodes:
@@ -58,17 +58,17 @@ def nearestNode(nodes, point):
 def RTT(node, goal, img, stepSize = 30):
     nodes = [node]
     i = 0
-    while i  < 100:
-        newCoords = getRPoint(img)
-        _nearestNode = nearestNode(nodes, newCoords)
-        x, y = createLineToNewPoint(_nearestNode, newCoords, stepSize)
-        nodes.append(Node("N/A", int(x), int(y)))
+    while i  < 100: # Max 100 points
+        newCoords = getRPoint(img) # Stores coordinates in newCoords from the new generated point(using getRPoint on the map)
+        _nearestNode = nearestNode(nodes, newCoords) # Measures distance too all generated nodes, takes the shortest distance and stores in _nearestnode variable
+        x, y = createLineToNewPoint(_nearestNode, newCoords, stepSize) #generates a line to the new point and saves the new points coordinates as x, y
+        nodes.append(Node("N/A", int(x), int(y))) #appends new coordinates as a new/next node in the nodes list
         i = i + 1
-        if not makeLine(img, _nearestNode.pos[0], _nearestNode.pos[1], nodes[-1].pos[0], nodes[-1].pos[1]):
-            nodes.pop(-1)
+        if not makeLine(img, _nearestNode.pos[0], _nearestNode.pos[1], nodes[-1].pos[0], nodes[-1].pos[1]): # If the line is false it will reset by not drawing the line and decrementing i 
+            nodes.pop(-1)                                                                                   # as the increment happens no matter what
             i = i - 1
         else:
-            print(i)
+            print(i) 
 
 img = cv2.imread("mymap0.pgm")
 imgOrig = cv2.imread("mymap0.pgm")
