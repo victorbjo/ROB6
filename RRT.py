@@ -45,7 +45,7 @@ def createLineToNewPoint(node, point, stepSize): # takes the random generated x,
     except:
         return (point)
 
-def nearestNode(nodes, point): # Iterates through each node generated and measure distance to them and save it in a list and find node minimum distance
+def nearestNode(nodes, point): # Iterates through each node generated and measure distance to them from the current node, save all distances in list and find node minimum distance
     distList = []
     tempNode = Node("Temp", point[0], point[1])
     for node in nodes:
