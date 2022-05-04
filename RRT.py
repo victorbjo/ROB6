@@ -69,10 +69,14 @@ def RTT(node, goal, img, stepSize = 30):
             i = i - 1
         else:
             print(i)
-            cv2.imwrite("images/RRT"+str(i)+".png", img)             
+            cv2.imwrite("images/RRT"+str(i)+".png", img)           
+        if (mesaureDist(nodes[-1], goal) < stepSize):
+            print("Reached goal!!!")
+            return nodes[-1]
 
-img = cv2.imread("mymap0.pgm")
-imgOrig = cv2.imread("mymap0.pgm")
+
+img = cv2.imread("maps/mymap0.pgm")
+imgOrig = cv2.imread("maps/mymap0.pgm")
 
 startNode = Node("start", 60, 70)
 goal = Node("goal", 134, 316)
