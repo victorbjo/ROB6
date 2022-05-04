@@ -68,10 +68,11 @@ dot_x(1,0) = c
 x(1,T) = d + c*T + b*T^2 + a*T^3
 dot_x(1,T) = c + 2*b*T + 3*a*T^2
 %%
+
 tf = 2
 
-x_r_0 = [1;0]
-x_r_T = [2;1]
+x_r_0 = [10;0]
+x_r_T = [20;10]
 v = 90
 v1 = 0
 h_r_0 = [cos(deg2rad(v));sin(deg2rad(v))]
@@ -126,9 +127,57 @@ R = [0,-1;1,0];
 
 
 w_m = dot(dh,R*vector1/norm(vector1))
+r = 0.1;
+D = 0.2;
+omega_a = - (D*w_m-omegaS)/r
+omega_b = (D*w_m+omegaS)/r
+%omega_a = (100*109^(1/2))/109 - 10*(abs(T/2 + 4967757600021511/81129638414606681695789005144064).^2 + abs(T/2 - 1).^2).^(1/2)
+%omega_b = 10*(abs(T/2 + 4967757600021511/81129638414606681695789005144064).^2 + abs(T/2 - 1).^2).^(1/2) - (100*109.^(1/2))/109
+
 
 plot (point1(1),point1(2), '.', 'markersize', 8)
 plot (point2(1),point2(2),'.', 'markersize',8)
 plot (point3(1),point3(2),'.', 'markersize',8)
 
-hold off
+
+
+x = zeros(2,41);
+h = x;
+h(:,1) = [cos(v);sin(v)];
+
+x_b = x;
+h_b = x;
+
+x_b(:,1) = x(:,1) - L * h(:,1);
+h_b(:,1) = h(:,1);
+
+for i = 1 : 41-1;
+    
+    %robot
+    omega_s = r*(omega_a(i) + omega_b(i))/2;
+    dot_x = h(:,i) *omega_s;
+    x(:,i+1) = x(:,i) + dT * dot_x;
+    omega_m = r*(omega_a(i)-omega_b(i))/D;
+    
+    dot_h = R*h(:,i)*omega_m;
+    h(:,i+1) = h(:,i) + dT * dot_h;
+    h(:,i+1) =h(:,i+1)/norm(h(:,i+1));
+    
+    %bed
+    dot_x_b = omega_s * h_b(:,i) * (h(:,i)' * h_b(:,i));
+    dot_h_b = omega_s * ((h(:,i)-h_b(:,i)*(h(:,i)' * h_b(:,i)))/L);
+    x_b(:,i+1) = x_b(:,i) + dT * dot_x_b;
+    h_b(:,i+1) = h_b(:,i) + dT * dot_h_b;
+    h_b(:,i+1) =h_b(:,i+1)/norm(h_b(:,i+1));
+    
+    clf
+    plot(x(1,i),x(2,i),'g*',x_b(1,i),x_b(2,i),'r*')
+    hold on
+    plot([x(1,i) x_b(1,i)], [x(2,i) x_b(2,i)])
+    hold on
+    plot (x_r,y_r)
+    hold off
+    axis([-10 10 -10 10]);
+    pause(0.2);
+end
+
