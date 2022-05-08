@@ -6,9 +6,7 @@ L = 2.5;
 R = [0,-1;1,0];
 v = 0.5857;
 
-dT = 0.1;
-T = 100;
-N = ceil(T/dT);
+
 
 x = zeros(2,N);
 h = x;
@@ -71,10 +69,10 @@ dot_x(1,T) = c + 2*b*T + 3*a*T^2
 
 tf = 2
 
-x_r_0 = [10;0]
-x_r_T = [20;10]
-v = 90
-v1 = 0
+x_r_0 = [1;0]
+x_r_T = [2;1]
+v = 45
+v1 = 45
 h_r_0 = [cos(deg2rad(v));sin(deg2rad(v))]
 h_r_T = [cos(deg2rad(v1));sin(deg2rad(v1))]
 
@@ -113,37 +111,76 @@ omegaS = (abs(T/2 + 0).^2 + abs(T/2-1).^2.^(1/2))
 
 mean(omegaS)
 
-point1 = [x_r(10); y_r(10)]
-point2 = [x_r(20); y_r(20)]
-point3 = [x_r(30); y_r(30)]
+dh = zeros(2,41)
+v_m = dh
+omega_a = zeros(1,41)
+omega_b = zeros(1,41)
 
-
-vector1 = point2-point1
-vector2 = point3-point2
-
-dh = vector2-vector1
-dh = dh / norm(dh)
+L = 2.5;
 R = [0,-1;1,0];
-
-
-w_m = dot(dh,R*vector1/norm(vector1))
 r = 0.1;
 D = 0.2;
-omega_a = - (D*w_m-omegaS)/r
-omega_b = (D*w_m+omegaS)/r
+
+for j = 1 : 41;
+    point1 = [x_r(j); y_r(j)]
+    
+    if j < 41-2
+        point2 = [x_r(j+1); y_r(j+1)]
+        point3 = [x_r(j+2); y_r(j+2)]
+        
+        vector1 = point2-point1
+        vector2 = point3-point2
+    end
+    
+    if j < 41-2
+        dh(:,j) = vector2-vector1
+        dh(:,j) = dh(:,j) /norm(dh(:,j))
+    end
+    %if j > 41-3
+       % dh(:,j) = dh(:,41-3)
+   % end
+    
+    
+    w_m(:,j) = dot(dh(:,j),R*vector1/norm(vector1))
+    
+    omega_a(:,j) = - (D*w_m(:,j)-omegaS(:,i))/r
+    omega_b(:,j) =(D*w_m(:,j)+omegaS(:,i))/r 
+end
+
+%point1 = [x_r(10); y_r(10)]
+%point2 = [x_r(20); y_r(20)]
+%point3 = [x_r(30); y_r(30)]
+
+
+%vector1 = point2-point1
+%vector2 = point3-point2
+
+%dh = vector2-vector1
+%dh = dh / norm(dh)
+%R = [0,-1;1,0];
+
+
+%w_m = dot(dh,R*vector1/norm(vector1))
+
+
+
+
+
 %omega_a = (100*109^(1/2))/109 - 10*(abs(T/2 + 4967757600021511/81129638414606681695789005144064).^2 + abs(T/2 - 1).^2).^(1/2)
 %omega_b = 10*(abs(T/2 + 4967757600021511/81129638414606681695789005144064).^2 + abs(T/2 - 1).^2).^(1/2) - (100*109.^(1/2))/109
 
 
-plot (point1(1),point1(2), '.', 'markersize', 8)
-plot (point2(1),point2(2),'.', 'markersize',8)
-plot (point3(1),point3(2),'.', 'markersize',8)
+%plot (point1(1),point1(2), '.', 'markersize', 8)
+%plot (point2(1),point2(2),'.', 'markersize',8)
+%plot (point3(1),point3(2),'.', 'markersize',8)
 
 
 
 x = zeros(2,41);
+
 h = x;
-h(:,1) = [cos(v);sin(v)];
+x(:,1) = x_r_0;
+h(:,1) = h_r_0;
 
 x_b = x;
 h_b = x;
@@ -151,7 +188,11 @@ h_b = x;
 x_b(:,1) = x(:,1) - L * h(:,1);
 h_b(:,1) = h(:,1);
 
-for i = 1 : 41-1;
+dT = 0.05;
+T = 2.05;
+N = ceil(T/dT);
+
+for i = 1 : N-1;
     
     %robot
     omega_s = r*(omega_a(i) + omega_b(i))/2;
@@ -176,8 +217,9 @@ for i = 1 : 41-1;
     plot([x(1,i) x_b(1,i)], [x(2,i) x_b(2,i)])
     hold on
     plot (x_r,y_r)
+    plot (x(1,:),x(2,:))
     hold off
     axis([-10 10 -10 10]);
-    pause(0.2);
+    %pause(0.2);
 end
 
