@@ -26,5 +26,5 @@ class Node:
         stringToReturn = str(self.id)
         return stringToReturn
     
-def addChild(node, newConnection):
+def addConnections(node, newConnection):
     node.connectedNodes = node.connectedNodes + [newConnection]
