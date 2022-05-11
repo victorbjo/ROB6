@@ -41,9 +41,9 @@ if __name__ == "__main__":
     n1 = Node("b",2,0)
     n2 = Node("c",3,1)
     n3 = Node("d",2,1)
-    n0.addConnections([n1, n3])
-    n1.addConnections([n2, n3])
-    n2.addConnections(n3)
+    n0.addConnection([n1, n3])
+    n1.addConnection([n2, n3])
+    n2.addConnection(n3)
 
 
     #djikstra(n0, n2)
