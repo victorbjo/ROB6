@@ -11,7 +11,7 @@ class Node:
         self.accumCost = 0
         self.backPointer = []
         self.cheapestBack = None
-    def addChild(self, newConnection):
+    def addConnection(self, newConnection):
         if isinstance(newConnection, list):
             self.connectedNodes = self.connectedNodes + newConnection
             for node in newConnection:
@@ -26,5 +26,5 @@ class Node:
         stringToReturn = str(self.id)
         return stringToReturn
     
-def addConnections(node, newConnection):
+def addConnection(node, newConnection):
     node.connectedNodes = node.connectedNodes + [newConnection]
