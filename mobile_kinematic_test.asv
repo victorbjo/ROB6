@@ -221,7 +221,7 @@ for i = 1 : N;
     %h(:,i+1) =h(:,i+1)/norm(h(:,i+1));
     
     %bed
-    dot_x_b = h_b(:,i) * omegaS(:,i) * dot(h_b(:,i),(dx_1(:,i)/norm(dx_1(:,i)))) ;%h_b(:,i) * ((dx_1(:,i) * h_b(:,i)));
+    dot_x_b = h_b(:,i) * meanomegaS(:,i) * dot(h_b(:,i),(dx_1(:,i)/norm(dx_1(:,i)))) ;%h_b(:,i) * ((dx_1(:,i) * h_b(:,i)));
     dot_h_b = (dx_1(:,i) - h_b(:,i) * dot(dx_1(:,i),h_b(:,i))) / L;    %omega_s * ((h(:,i)-h_b(:,i)*(h(:,i)' * h_b(:,i)))/L);  
     x_b(:,i+1) = x_b(:,i) + dT * dot_x_b;
     h_b(:,i+1) = h_b(:,i) + dT * dot_h_b;
