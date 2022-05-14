@@ -70,7 +70,7 @@ def RTT(node, goal, img, stepSize = 30):
         else:
             print(i)
             cv2.imwrite("images/RRT"+str(i)+".png", img)           
-        if (mesaureDist(nodes[-1], goal) < stepSize):
+        if (mesaureDist(nodes[-1], goal) < stepSize): # If a node is within the stepSize distance of the goal node, a line will be created between the two nodes
             if makeLine(img, goal.pos[0], goal.pos[1], nodes[-1].pos[0], nodes[-1].pos[1]):
                 print("Reached goal!!!")
                 return nodes
