@@ -17,7 +17,10 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
     c1 = h_r_0[1]
     b1 = (3/(tf**2))*((x_r_t[1])- d1) - 1/tf * (2*h_r_0[1]+h_r_t[1])
     a1 = -2/(tf**3)*((x_r_t[1])- d1) + 1/(tf**2) * (h_r_0[1]+h_r_t[1])
-
+    print(a)
+    print(b)
+    print(c)
+    print(d)
     t = [0.05, tf]
     x_r = []
     y_r = []
