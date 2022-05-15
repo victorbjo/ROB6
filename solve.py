@@ -2,6 +2,7 @@ from sympy.solvers import solve
 from sympy import *
 from cmath import cos, sin
 from math import radians
+from loadParams import *
 x = Symbol('x')
 #print(solve(x**2-1, x))
 def norm(a, b):
@@ -31,9 +32,7 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
     dx = x.jacobian(args)#Calculates jacobian
     #print(dx)
     ws = norm(dx[0], dx[1])
-    print("FUCK0")
     heading = dx/ws
-    print(heading.subs(t, "1"))
     #ws.subs(t, 10)
     #print(ws.subs(t, 1))
     #print(ws)
@@ -42,9 +41,6 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
     #Constants
 
     L = 2.5 #Needs to be fixed, not hard programmed
-    R = Matrix([[0, -1],[1,0]])
-    r = 0.1#radius of robot wheels
-    D = 0.2#distance between wheels
     x_r_0Matrix = Matrix([x_r_0[0],x_r_0[1]])
     h_r_0Matrix = Matrix([h_r_0[0],h_r_0[1]])
 
