@@ -85,10 +85,10 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
     #print(x_b_0)
     print(length)
 
-xBed, hBed, xRobot, hRobot = trajectoryGen(2, 1, 1, 20, 20, 90, 0)
+xBed, hBed, xRobot, hRobot = trajectoryGen(2, 1, 1, 2, 2, 90, 90)
+image = cv2.imread('blank.png')
 for x in range (len(xBed)-1):
     time = 0.05*x
-    image = cv2.imread('blank.png')
     bedX = (round(xBed[x][0],2))
     bedY = (round(xBed[x][1],2))
     bedH = degrees(acos(hBed[x][0]))
@@ -97,9 +97,9 @@ for x in range (len(xBed)-1):
     robotH = degrees(acos(hRobot[0].subs("t",time)))
     drawTools.drawRect(image, bed, bedH, bedX, bedY)
     drawTools.drawRect(image, robot, robotH, robotX, robotY)
-    cv2.imwrite("images/trailer/"+str(x)+".png", image)
-cv2.imshow('image', image)
-cv2.waitKey()
+    #cv2.imwrite("images/trailer/"+str(x)+".png", image)
+    cv2.imshow('image', image)
+    cv2.waitKey()
 
     #print(x)
     #print(time)
