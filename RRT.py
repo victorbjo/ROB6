@@ -58,7 +58,7 @@ def nearestNode(nodes, point): # Iterates through each node generated and measur
 def RTT(node, goal, img, stepSize = 30):
     nodes = [node]
     i = 0
-    while i  < 250:
+    while i  < 500:
         newCoords = getRPoint(img) # Stores coordinates in newCoords from the new generated point(using getRPoint on the map)
         _nearestNode = nearestNode(nodes, newCoords) # Measures distance too all generated nodes, takes the shortest distance and stores in _nearestnode variable
         x, y = createLineToNewPoint(_nearestNode, newCoords, stepSize) #generates a line to the new point and saves the new points coordinates as x, y
@@ -80,7 +80,7 @@ img = cv2.imread("maps/mymap0.pgm")
 imgOrig = cv2.imread("maps/mymap0.pgm")
 
 startNode = Node("start", 60, 70)
-goal = Node("goal", 134, 316)
+goal = Node("goal", 134, 3160)
 RTT(startNode,goal,img, 15)
 getRPoint(img)
 cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", img)

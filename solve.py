@@ -1,10 +1,11 @@
 from sympy.solvers import solve
 from sympy import *
 from cmath import cos, sin
-from math import radians
+from math import radians, degrees
 from loadParams import *
+import drawTools
 x = Symbol('x')
-#print(solve(x**2-1, x))
+import cv2
 def norm(a, b):
     return simplify(sqrt((a**2) + (b**2)))
 def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
@@ -26,7 +27,7 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
 
 
     t = Symbol('t')
-    x = Matrix([a*t**3 + b*t**2 + c*t +d, a1*t**3 + b1*t**2 + c1*t +d1])
+    xRobot = x = Matrix([a*t**3 + b*t**2 + c*t +d, a1*t**3 + b1*t**2 + c1*t +d1])
 
     args = Matrix([t])
     dx = x.jacobian(args)#Calculates jacobian
@@ -37,18 +38,16 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
     #print(ws.subs(t, 1))
     #print(ws)
     time = [0.05, tf]
-
     #Constants
 
-    L = 2.5 #Needs to be fixed, not hard programmed
+    L = 3 #Needs to be fixed, not hard programmed
     x_r_0Matrix = Matrix([x_r_0[0],x_r_0[1]])
     h_r_0Matrix = Matrix([h_r_0[0],h_r_0[1]])
 
     x_b_0 = [x_r_0Matrix - L * h_r_0Matrix]
     h_b_0 = [h_r_0Matrix]
-    #print("FYCJ")
-    #print(x_b_0)
-    #print(ws)
+
+
     x_r = []
     y_r = []
 
@@ -79,7 +78,28 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
         h_b_0[-1] = (h_b_0[x+1] / norm(h_b_0[x+1][0], h_b_0[x+1][1]))
         #print(x_r_0[x])
         length.append(sqrt((x_b_0[x][0]-x_r[x])**2+(x_b_0[x][1]-y_r[x])**2))
+    
     #print(x_b_0)
-    #print(length)
+    print(length)
+    return x_b_0, h_b_0, xRobot, heading
+    #print(x_b_0)
+    print(length)
 
-trajectoryGen(2, 1, 1, 2, 2, 90, 90)
+xBed, hBed, xRobot, hRobot = trajectoryGen(2, 1, 1, 20, 20, 90, 0)
+for x in range (len(xBed)-1):
+    time = 0.05*x
+    image = cv2.imread('blank.png')
+    bedX = (round(xBed[x][0],2))
+    bedY = (round(xBed[x][1],2))
+    bedH = degrees(acos(hBed[x][0]))
+    robotX = xRobot[0].subs("t", time)
+    robotY = xRobot[1].subs("t", time)
+    robotH = degrees(acos(hRobot[0].subs("t",time)))
+    drawTools.drawRect(image, bed, bedH, bedX, bedY)
+    drawTools.drawRect(image, robot, robotH, robotX, robotY)
+    cv2.imwrite("images/trailer/"+str(x)+".png", image)
+cv2.imshow('image', image)
+cv2.waitKey()
+
+    #print(x)
+    #print(time)
