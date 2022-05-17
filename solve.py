@@ -85,10 +85,13 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
     #print(x_b_0)
     print(length)
 
-xBed, hBed, xRobot, hRobot = trajectoryGen(2, 1, 1, 2, 2, 90, 90)
+xBed, hBed, xRobot, hRobot = trajectoryGen(2, 7, 7, 14, 14, 135, 45)
 image = cv2.imread('blank.png')
+compound = True
 for x in range (len(xBed)-1):
     time = 0.05*x
+    if (compound):
+        image = cv2.imread('blank.png')
     bedX = (round(xBed[x][0],2))
     bedY = (round(xBed[x][1],2))
     bedH = degrees(acos(hBed[x][0]))

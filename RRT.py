@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 import cv2
 from nodeClass import Node
 from shapely import geometry as geo
+def findAngle(x0, y0, x1, y1):
+    delta_x = x1 - x0
+    delta_y = y1 - y0
+    theta_radians = math.atan2(delta_y, delta_x)
+    return math.degrees(theta_radians)
 def mesaureDist(node0 : Node, node1 : Node): # Measure the distance between two nodes using pythagoras theorem
     a = node1.pos[0]-node0.pos[0]
     a = a * a
@@ -17,9 +22,19 @@ def checkLine(imgNew, imgOld): # Check if the line on the current map is placed 
                 if (imgOld[idx][idy][0] == 205 or imgOld[idx][idy][0] == 0):
                     return False
     return True
-def makeLine(imgOld, x0, y0, x1, y1): # Creates line between two different sets of (x,y) coordinates on the new map
+def makeLine(imgOld,node0 : Node, node1 : Node, x0, y0, x1, y1): # Creates line between two different sets of (x,y) coordinates on the new map
+    x0 = node0.pos[0]
+    y0 = node0.pos[1]
+    x1 = node1.pos[0]
+    y1 = node1.pos[1]
     color = (255, 0, 0)
     newImage = imgOld.copy()
+    tempAngle = [findAngle(x0, y0, x1, y1)]
+    tempAngle.append(tempAngle[0]+45)
+    tempAngle.append(tempAngle[0]-45)
+    print(tempAngle)
+    for x in range(3):
+        pass
     cv2.line(newImage, (x0,y0),(x1,y1), color, 5)
     if checkLine(newImage, imgOld):
         cv2.line(imgOld, (x0,y0),(x1,y1), color, 2)
@@ -56,32 +71,37 @@ def nearestNode(nodes, point): # Iterates through each node generated and measur
     return(nodes[distList.index(tempNode)])
 
 def RTT(node, goal, img, stepSize = 30):
-    nodes = [node]
+    nodes : list[Node] = [node]
     i = 0
     while i  < 500:
         newCoords = getRPoint(img) # Stores coordinates in newCoords from the new generated point(using getRPoint on the map)
         _nearestNode = nearestNode(nodes, newCoords) # Measures distance too all generated nodes, takes the shortest distance and stores in _nearestnode variable
         x, y = createLineToNewPoint(_nearestNode, newCoords, stepSize) #generates a line to the new point and saves the new points coordinates as x, y
-        nodes.append(Node("N/A", int(x), int(y))) #appends new coordinates as a new/next node in the nodes list
+        nodes.append(Node(i, int(x), int(y))) #appends new coordinates as a new/next node in the nodes list
         i = i + 1
-        if not makeLine(img, _nearestNode.pos[0], _nearestNode.pos[1], nodes[-1].pos[0], nodes[-1].pos[1]): # If the line is false it will reset by not drawing the line and decrementing i 
+        if not makeLine(img, _nearestNode, nodes[-1]): # If the line is false it will reset by not drawing the line and decrementing i 
             nodes.pop(-1)                                                                                   # as the increment happens no matter what
             i = i - 1
         else:
             print(i)
-            cv2.imwrite("images/RRT"+str(i)+".png", img)           
+            cv2.imwrite("images/RRT"+str(i)+".png", img)      
+            nodes[-1].addConnection(nodes[-2])    
         if (mesaureDist(nodes[-1], goal) < stepSize): # If a node is within the stepSize distance of the goal node, a line will be created between the two nodes
             if makeLine(img, goal.pos[0], goal.pos[1], nodes[-1].pos[0], nodes[-1].pos[1]):
                 print("Reached goal!!!")
+                nodes.append(Node("Goal", goal.pos[0], goal.pos[1]))
+                nodes[-1].addConnection(nodes[-2])
                 return nodes
 
 
-img = cv2.imread("maps/mymap0.pgm")
-imgOrig = cv2.imread("maps/mymap0.pgm")
+if __name__ == "__main__":
+    #print(findAngle(1,1,0,2))
+    img = cv2.imread("maps/mymap0.pgm")
+    imgOrig = cv2.imread("maps/mymap0.pgm")
 
-startNode = Node("start", 60, 70)
-goal = Node("goal", 134, 3160)
-RTT(startNode,goal,img, 15)
-getRPoint(img)
-cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", img)
-cv2.waitKey() 
+    startNode = Node("start", 60, 70)
+    goal = Node("goal", 134, 3160)
+    RTT(startNode,goal,img, 15)
+    #getRPoint(img)
+    cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", img)
+    cv2.waitKey() 
