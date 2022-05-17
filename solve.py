@@ -2,6 +2,8 @@ from sympy.solvers import solve
 from sympy import *
 from cmath import cos, sin
 from math import radians, degrees
+import math
+from nodeClass import Node
 from loadParams import *
 import drawTools
 x = Symbol('x')
@@ -80,29 +82,88 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
         length.append(sqrt((x_b_0[x][0]-x_r[x])**2+(x_b_0[x][1]-y_r[x])**2))
     
     #print(x_b_0)
-    print(length)
+    #print(length)
     return x_b_0, h_b_0, xRobot, heading
     #print(x_b_0)
     print(length)
+def findAngle(x0, y0, x1, y1):
+    delta_x = x1 - x0
+    delta_y = y1 - y0
+    theta_radians = math.atan2(delta_y, delta_x)
+    return math.degrees(theta_radians)
 
-xBed, hBed, xRobot, hRobot = trajectoryGen(2, 7, 7, 14, 14, 135, 45)
+
 image = cv2.imread('blank.png')
-compound = True
-for x in range (len(xBed)-1):
-    time = 0.05*x
-    if (compound):
-        image = cv2.imread('blank.png')
-    bedX = (round(xBed[x][0],2))
-    bedY = (round(xBed[x][1],2))
-    bedH = degrees(acos(hBed[x][0]))
-    robotX = xRobot[0].subs("t", time)
-    robotY = xRobot[1].subs("t", time)
-    robotH = degrees(acos(hRobot[0].subs("t",time)))
-    drawTools.drawRect(image, bed, bedH, bedX, bedY)
-    drawTools.drawRect(image, robot, robotH, robotX, robotY)
-    #cv2.imwrite("images/trailer/"+str(x)+".png", image)
-    cv2.imshow('image', image)
+compound = False
+compund = True
+def drawPath(img, node0 : Node, node1 : Node):
+    print("YOURE IN SOLVE NOW")
+    x0 = node0.pos[0]/20
+    y0 = node0.pos[1]/20
+    x1 = node1.pos[0]/20
+    y1 = node1.pos[1]/20
+    h0 = node0.heading
+    h1 = node1.heading
+    angle = findAngle(x0,y0,x1,y1)
+    if angle < 0:
+        angle+=360
+    if h0 > angle+10 or h0 < angle - 15:
+        print("TOO WIDE")
+        return False
+    print(x0, y0, x1, y1, h0, h1)
+    print(angle)
+    xBed, hBed, xRobot, hRobot = trajectoryGen(2, x0, y0, x1, y1, h0, h1)
+    nimg = img.copy()
+    for x in range (len(xBed)-1):
+        #nimg = img.copy()
+        time = 0.05*x
+        bedX = (round(xBed[x][0],2))
+        bedY = (round(xBed[x][1],2))
+        bedH = degrees(acos(hBed[x][0]))
+        robotX = xRobot[0].subs("t", time)
+        robotY = xRobot[1].subs("t", time)
+        bedY1 = (round(xBed[x+1][1],2))
+        robotH = degrees(acos(hRobot[0].subs("t",time)))
+        if bedY > robotY :
+            #pass
+            bedH = -bedH
+            robotH = -robotH
+        drawTools.drawRect(nimg, bed, bedH, bedX*20, bedY*20)
+        drawTools.drawRect(nimg, robot, robotH, robotX*20, robotY*20)
+        #cv2.imwrite("images/trailer/"+str(x)+".png", image)
+    cv2.imshow('image', nimg)
     cv2.waitKey()
+    return nimg
+if __name__ == "__main__":
+    print("FUCK")
+    angle = findAngle(4.65, 6.65, 5.35, 6.55)#When making function make sure that all inputs above 180 be plussed with 360
+    if angle < 0:
+        angle+=360
+    print(angle)
+    xBed, hBed, xRobot, hRobot = trajectoryGen(2, 4.65, 6.65, 5.35, 6.75, 286.6992442339936, 306.86989764584405)
+    
+    for x in range (len(xBed)-1):
+        time = 0.05*x
+        if (compound):
+            image = cv2.imread('blank.png')
+        bedX = (round(xBed[x][0],2))
+        bedY = (round(xBed[x][1],2))
+        bedH = degrees(acos(hBed[x][0]))
+        robotX = xRobot[0].subs("t", time)
+        robotY = xRobot[1].subs("t", time)
+        bedY1 = (round(xBed[x+1][1],2))
+        robotH = degrees(acos(hRobot[0].subs("t",time)))
+        if bedY > robotY :
+            #pass
+            bedH = -bedH
+            robotH = -robotH
+        drawTools.drawRect(image, bed, bedH, bedX*20, bedY*20)
+        drawTools.drawRect(image, robot, robotH, robotX*20, robotY*20)
+        print(robotH)
+        #cv2.imwrite("images/trailer/"+str(x)+".png", image)
+        cv2.imshow('image', image)
+        cv2.waitKey()
 
-    #print(x)
-    #print(time)
+        #print(x)
+        #print(time)
+    

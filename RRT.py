@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import cv2
 from nodeClass import Node
 from shapely import geometry as geo
+import solve
 def findAngle(x0, y0, x1, y1):
     delta_x = x1 - x0
     delta_y = y1 - y0
@@ -22,20 +23,33 @@ def checkLine(imgNew, imgOld): # Check if the line on the current map is placed 
                 if (imgOld[idx][idy][0] == 205 or imgOld[idx][idy][0] == 0):
                     return False
     return True
-def makeLine(imgOld,node0 : Node, node1 : Node, x0, y0, x1, y1): # Creates line between two different sets of (x,y) coordinates on the new map
+def makeLine(imgOld,node0 : Node, node1 : Node): # Creates line between two different sets of (x,y) coordinates on the new map
     x0 = node0.pos[0]
     y0 = node0.pos[1]
     x1 = node1.pos[0]
     y1 = node1.pos[1]
     color = (255, 0, 0)
-    newImage = imgOld.copy()
-    tempAngle = [findAngle(x0, y0, x1, y1)]
-    tempAngle.append(tempAngle[0]+45)
-    tempAngle.append(tempAngle[0]-45)
-    print(tempAngle)
+    newImage = imgOld.copy()#Creates new image to draw on. This is done in case the changes need to be reverted, the old image can still be used..
+    tempAngle = [findAngle(x0, y0, x1, y1)] #Finds angle between old node and new node, compared to x axis
+    if tempAngle[0] < 0:
+        tempAngle[0] = tempAngle[0] + 360#This is done to make sure that anything above 180 is actually something like 190 and not -170
+    tempAngle.append(tempAngle[0]+45) #Finds two new angles, this one +45 deg of orig angle
+    tempAngle.append(tempAngle[0]-45) #This one -45 of orig angle
+    #print(node1.id)
+    #print(tempAngle)
+    cv2.line(newImage, (x0,y0),(x1,y1), color, 2)
     for x in range(3):
-        pass
-    cv2.line(newImage, (x0,y0),(x1,y1), color, 5)
+        node1.heading = tempAngle[x]
+        try:
+            status = solve.drawPath(newImage, node0, node1)
+            if status is not False:
+                print("OKFOFK")
+                if checkLine(status, imgOld):
+                    cv2.line(imgOld, (x0,y0),(x1,y1), color, 2)
+                    return True
+        except:
+            pass
+    return False
     if checkLine(newImage, imgOld):
         cv2.line(imgOld, (x0,y0),(x1,y1), color, 2)
         return True
@@ -73,6 +87,7 @@ def nearestNode(nodes, point): # Iterates through each node generated and measur
 def RTT(node, goal, img, stepSize = 30):
     nodes : list[Node] = [node]
     i = 0
+    triesCounter = 0
     while i  < 500:
         newCoords = getRPoint(img) # Stores coordinates in newCoords from the new generated point(using getRPoint on the map)
         _nearestNode = nearestNode(nodes, newCoords) # Measures distance too all generated nodes, takes the shortest distance and stores in _nearestnode variable
@@ -82,16 +97,21 @@ def RTT(node, goal, img, stepSize = 30):
         if not makeLine(img, _nearestNode, nodes[-1]): # If the line is false it will reset by not drawing the line and decrementing i 
             nodes.pop(-1)                                                                                   # as the increment happens no matter what
             i = i - 1
+            triesCounter = triesCounter + 1
         else:
-            print(i)
+            #print(i)
+            triesCounter = 0
             cv2.imwrite("images/RRT"+str(i)+".png", img)      
-            nodes[-1].addConnection(nodes[-2])    
+            nodes[-1].addConnection(nodes[-2])
+        if triesCounter > 8 and len(nodes) > 1:
+            triesCounter = 0
+            nodes.pop()    
         if (mesaureDist(nodes[-1], goal) < stepSize): # If a node is within the stepSize distance of the goal node, a line will be created between the two nodes
-            if makeLine(img, goal.pos[0], goal.pos[1], nodes[-1].pos[0], nodes[-1].pos[1]):
+            if makeLine(img, nodes[-1], goal):
                 print("Reached goal!!!")
-                nodes.append(Node("Goal", goal.pos[0], goal.pos[1]))
-                nodes[-1].addConnection(nodes[-2])
-                return nodes
+            nodes.append(Node("Goal", goal.pos[0], goal.pos[1]))
+            nodes[-1].addConnection(nodes[-2])
+            return nodes
 
 
 if __name__ == "__main__":

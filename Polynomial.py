@@ -30,13 +30,15 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
         x_r.append((a*T**3 + b*T**2 + c*T + d).real)
         y_r.append((a1*T**3 + b1*T**2 + c1*T + d1).real)
     return x_r, y_r
+#trajectoryGen(2, 14, 7, 14, 14, 270, 235)
+mult = 0.5
+x0, y0 = trajectoryGen(2, 4.65*mult, 6.7*mult, 4.3*mult, 6.0*mult, 290.22485943116806, 288.434948822922)
 
-x0, y0 = trajectoryGen(2, 1, 1, 2, 2, 0, 45)
 x1, y1 = trajectoryGen(2, 1, 0, 2, 1, 90, 45)
 x2 , y2 = trajectoryGen(2, 1, 0, 2, 1, 90, 0)
 plt.figure("Trajectory Generator")
 plt.plot(x0, y0, color="red")
 #plt.plot(x1, y1, color="blue")
-plt.plot(x2, y2, color="#0fee0f")
+#plt.plot(x2, y2, color="#0fee0f")
 
 plt.show()

@@ -13,14 +13,17 @@ def drawRect(tempimg, vehicle, angle, x, y):
     wheelBaseX = length/2 - center
     actualX = int(wheelBaseX * cos(radians(angle)))
     actualY = int(wheelBaseX * sin(radians(angle)))
-    x, y = int(meterToPixel(x)), int(meterToPixel(y))
+    x, y = int((x)), int((y))
     rect = ((x+actualX, y+actualY), (length, width), angle)
     box = np.int0(cv2.boxPoints(rect))
     tempimg[y][int(x)] = [0,0,0]
-    cv2.drawContours(tempimg, [box], 0, (255,0,0), -1)
+    cv2.drawContours(tempimg, [box], 0, (255,0,0), 1)
 if __name__ == "__main__":
-    drawRect(image, robot, 0, 2.5, 0)
-    drawRect(image, bed, 25, 0, 1)
+    image = cv2.imread('testMap.png')
+    drawRect(image, robot, -90, 14, 14)
+    drawRect(image, bed, -90, 14, 17)
+    #90.00000000000001 14.0000000000000 17.0000000000000
+    #-90.00000000000001 14 14
     #drawRect(image, x.bed, 40, 21.5, 20)
     cv2.imshow('image', image)
     cv2.waitKey()
