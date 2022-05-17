@@ -16,7 +16,38 @@ plt.show()
 pub = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=10)
 rospy.init_node("move")
 
-def goTo(x,y, x_rot,y_rot,z_rot,w_rot):
+
+#! /usr/bin/env python3
+ 
+# This program converts Euler angles to a quaternion.
+# Author: AutomaticAddison.com
+ 
+import numpy as np # Scientific computing library for Python
+ 
+def get_quaternion_from_euler(roll, pitch, yaw):
+  """
+  Convert an Euler angle to a quaternion.
+   
+  Input
+    :param roll: The roll (rotation around x-axis) angle in radians.
+    :param pitch: The pitch (rotation around y-axis) angle in radians.
+    :param yaw: The yaw (rotation around z-axis) angle in radians.
+ 
+  Output
+    :return qx, qy, qz, qw: The orientation in quaternion [x,y,z,w] format
+  """
+    qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+    qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
+    qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
+    qw = np.cos(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+ 
+    return [qx, qy, qz, qw]
+
+
+def goTo(x,y, z_rot):
+
+    quaterions = get_quaternion_from_euler(0,0, z_rot)
+
     goal = PoseStamped()
     goal.header.seq = 0
     goal.header.stamp = rospy.Time.now()
@@ -28,10 +59,10 @@ def goTo(x,y, x_rot,y_rot,z_rot,w_rot):
     goal.pose.position.y = y
     goal.pose.position.z = 0
 
-    goal.pose.orientation.x = x_rot
-    goal.pose.orientation.y = y_rot
-    goal.pose.orientation.z = z_rot
-    goal.pose.orientation.w = w_rot
+    goal.pose.orientation.x = quaterions[0]
+    goal.pose.orientation.y = quaterions[1]
+    goal.pose.orientation.z = quaterions[2]
+    goal.pose.orientation.w = quaterions[3]
     
     delay(2)
 
