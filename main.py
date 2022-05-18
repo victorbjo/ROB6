@@ -14,7 +14,10 @@ n1.addConnection(n2)
 n2.addConnection([n3, n4])
 n3.addConnection(n4)
 route = shortestRoute(n0,n3)
-currentTree = RRT.RTT(route[0],route[1],map, 40)
+currentTree = []
+#for x in range(len(route)-1):
+currentTree.append(RRT.RTT(route[0],route[-1],map, 30))
+print(currentTree)
 cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", map)
 cv2.waitKey() 
 print(currentTree)

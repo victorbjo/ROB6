@@ -41,10 +41,13 @@ def makeLine(imgOld,node0 : Node, node1 : Node): # Creates line between two diff
     for x in range(3):
         node1.heading = tempAngle[x]
         try:
-            status = solve.drawPath(newImage, node0, node1)
+            status =  solve.drawPath(newImage, node0, node1)
             if status is not False:
-                print("OKFOFK")
                 if checkLine(status, imgOld):
+                    print("Works")
+                    #cv2.imshow("SOm", status)
+                    #cv2.waitKey()
+                    #imgOld = status.copy()
                     cv2.line(imgOld, (x0,y0),(x1,y1), color, 2)
                     return True
         except:
@@ -103,7 +106,7 @@ def RTT(node, goal, img, stepSize = 30):
             triesCounter = 0
             cv2.imwrite("images/RRT"+str(i)+".png", img)      
             nodes[-1].addConnection(nodes[-2])
-        if triesCounter > 8 and len(nodes) > 1:
+        if triesCounter > 40 and len(nodes) > 1:
             triesCounter = 0
             nodes.pop()    
         if (mesaureDist(nodes[-1], goal) < stepSize): # If a node is within the stepSize distance of the goal node, a line will be created between the two nodes
@@ -111,7 +114,7 @@ def RTT(node, goal, img, stepSize = 30):
                 print("Reached goal!!!")
             nodes.append(Node("Goal", goal.pos[0], goal.pos[1]))
             nodes[-1].addConnection(nodes[-2])
-            return nodes
+            return nodes 
 
 
 if __name__ == "__main__":

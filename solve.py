@@ -42,7 +42,7 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
     time = [0.05, tf]
     #Constants
 
-    L = 3 #Needs to be fixed, not hard programmed
+    L = 1.5 #Needs to be fixed, not hard programmed
     x_r_0Matrix = Matrix([x_r_0[0],x_r_0[1]])
     h_r_0Matrix = Matrix([h_r_0[0],h_r_0[1]])
 
@@ -97,7 +97,6 @@ image = cv2.imread('blank.png')
 compound = False
 compund = True
 def drawPath(img, node0 : Node, node1 : Node):
-    print("YOURE IN SOLVE NOW")
     x0 = node0.pos[0]/20
     y0 = node0.pos[1]/20
     x1 = node1.pos[0]/20
@@ -107,8 +106,7 @@ def drawPath(img, node0 : Node, node1 : Node):
     angle = findAngle(x0,y0,x1,y1)
     if angle < 0:
         angle+=360
-    if h0 > angle+10 or h0 < angle - 15:
-        print("TOO WIDE")
+    if h0 > angle+45 or h0 < angle - 45:
         return False
     print(x0, y0, x1, y1, h0, h1)
     print(angle)
@@ -128,14 +126,14 @@ def drawPath(img, node0 : Node, node1 : Node):
             #pass
             bedH = -bedH
             robotH = -robotH
-        drawTools.drawRect(nimg, bed, bedH, bedX*20, bedY*20)
+        #drawTools.drawRect(nimg, bed, bedH, bedX*20, bedY*20)
         drawTools.drawRect(nimg, robot, robotH, robotX*20, robotY*20)
         #cv2.imwrite("images/trailer/"+str(x)+".png", image)
-    cv2.imshow('image', nimg)
-    cv2.waitKey()
+    #cv2.imshow('image', nimg)
+    #cv2.waitKey()
     return nimg
 if __name__ == "__main__":
-    print("FUCK")
+    print("Main")
     angle = findAngle(4.65, 6.65, 5.35, 6.55)#When making function make sure that all inputs above 180 be plussed with 360
     if angle < 0:
         angle+=360

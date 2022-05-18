@@ -20,8 +20,8 @@ def drawRect(tempimg, vehicle, angle, x, y):
     cv2.drawContours(tempimg, [box], 0, (255,0,0), 1)
 if __name__ == "__main__":
     image = cv2.imread('testMap.png')
-    drawRect(image, robot, -90, 14, 14)
-    drawRect(image, bed, -90, 14, 17)
+    drawRect(image, robot, -90, 140, 140)
+    drawRect(image, bed, -90, 140, 200)
     #90.00000000000001 14.0000000000000 17.0000000000000
     #-90.00000000000001 14 14
     #drawRect(image, x.bed, 40, 21.5, 20)
