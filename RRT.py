@@ -60,9 +60,12 @@ def makeLine(imgOld,node0 : Node, node1 : Node): # Creates line between two diff
 
 def getRPoint(img): #Takes the .shape of the img to get all the width and height values in an array, and then finds random x and y point 
     shape = img.shape
-    randomX = random.randint(0, shape[0])
-    randomY = random.randint(0, shape[1])-20
-    return(randomX, randomY)
+    valid = False
+    while valid is False:
+        randomX = random.randint(0, shape[0])
+        randomY = random.randint(0, shape[1])
+        valid = img[abs(randomX-1)][abs(randomY-1)][0] >= 250
+    return(randomY, abs(randomX-30))
 
 # Stepsize is the length between the start and end of a line
 
