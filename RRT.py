@@ -60,7 +60,7 @@ def makeLine(imgOld,node0 : Node, node1 : Node): # Creates line between two diff
 
 def getRPoint(img): #Takes the .shape of the img to get all the width and height values in an array, and then finds random x and y point 
     shape = img.shape
-    randomX = random.randint(0, shape[0])
+    randomX = random.randint(0, shape[0])+430
     randomY = random.randint(0, shape[1])
     return(randomX, randomY)
 
@@ -100,14 +100,14 @@ def RTT(node, goal, img, stepSize = 30):
         if not makeLine(img, _nearestNode, nodes[-1]): # If the line is false it will reset by not drawing the line and decrementing i 
             nodes.pop(-1)                                                                                   # as the increment happens no matter what
             i = i - 1
-            triesCounter = triesCounter + 1
+            _nearestNode.failedConnections += 1
         else:
             #print(i)
             triesCounter = 0
-            cv2.imwrite("images/RRT"+str(i)+".png", img)      
+            #cv2.imwrite("images/RRT"+str(i)+".png", img)      
             nodes[-1].addConnection(nodes[-2])
-        if triesCounter > 40 and len(nodes) > 1:
-            triesCounter = 0
+        if nodes[-1].failedConnections > 20 and nodes[-1]:
+            nodes.pop()
             nodes.pop()    
         if (mesaureDist(nodes[-1], goal) < stepSize): # If a node is within the stepSize distance of the goal node, a line will be created between the two nodes
             if makeLine(img, nodes[-1], goal):

@@ -6,6 +6,7 @@ import math
 from nodeClass import Node
 from loadParams import *
 import drawTools
+import time as tm
 x = Symbol('x')
 import cv2
 def norm(a, b):
@@ -146,6 +147,7 @@ def drawPath(img, node0 : Node, node1 : Node):
     if config["showSteps"] == 1:
         cv2.imshow('image', nimg)
         cv2.waitKey(config["msPerFig"])
+        cv2.imwrite("images/"+str(int(tm.time()))+".png", nimg)
     return nimg
 if __name__ == "__main__":
     print("Main")

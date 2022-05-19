@@ -11,6 +11,7 @@ class Node:
         self.heading = None
         self.headingBed = None
         self.route = []
+        self.failedConnections = 0
     def addConnection(self, newConnection):
         if isinstance(newConnection, list):
             self.connectedNodes = self.connectedNodes + newConnection
