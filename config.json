@@ -3,6 +3,6 @@
     "drawBed" : 0,
     "showSteps": 1,
     "msPerFig" : 10,
-    "stepSize" : 20,
-    "maxAngleDelta" : 65
+    "stepSize" : 30,
+    "maxAngleDelta" : 75
 }

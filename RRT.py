@@ -60,8 +60,8 @@ def makeLine(imgOld,node0 : Node, node1 : Node): # Creates line between two diff
 
 def getRPoint(img): #Takes the .shape of the img to get all the width and height values in an array, and then finds random x and y point 
     shape = img.shape
-    randomX = random.randint(0, shape[0])+430
-    randomY = random.randint(0, shape[1])
+    randomX = random.randint(0, shape[0])
+    randomY = random.randint(0, shape[1])-20
     return(randomX, randomY)
 
 # Stepsize is the length between the start and end of a line
@@ -106,7 +106,7 @@ def RTT(node, goal, img, stepSize = 30):
             triesCounter = 0
             #cv2.imwrite("images/RRT"+str(i)+".png", img)      
             nodes[-1].addConnection(nodes[-2])
-        if nodes[-1].failedConnections > 20 and nodes[-1]:
+        if nodes[-1].failedConnections > 20 and len(nodes) > 2:
             nodes.pop()
             nodes.pop()    
         if (mesaureDist(nodes[-1], goal) < stepSize): # If a node is within the stepSize distance of the goal node, a line will be created between the two nodes

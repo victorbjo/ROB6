@@ -12,3 +12,4 @@ def loadRoute(file):
                 x[num] = float(x[num])
             names.append(x)
     return names
+print(loadRoute("route.txt"))
