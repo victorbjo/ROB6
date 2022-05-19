@@ -34,7 +34,9 @@ def get_quaternion_from_euler(roll, pitch, yaw):
 
 
 def goTo(x,y, z_rot):
-
+#    x = x*0.05
+#    y = (636-y)*0.05
+#    z_rot = -z_rot
     quaterions = get_quaternion_from_euler(0,0, z_rot)
 
     goal = PoseStamped()
@@ -66,8 +68,8 @@ d = (153*0.05, (636-261)*0.05)
 
 
 
-goTo(810*0.05, (636-150)*0.05, 1.57*3)
-
+goTo(805*0.05, (636-150)*0.05, 1.57*3)
+goTo(800*0.05, (636-350)*0.05, 1.57)
 rospy.spin()
 
 
