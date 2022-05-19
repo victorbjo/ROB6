@@ -2,7 +2,7 @@
     "drawRobot" : 1,
     "drawBed" : 0,
     "showSteps": 1,
-    "msPerFig" : 100,
+    "msPerFig" : 10,
     "stepSize" : 20,
     "maxAngleDelta" : 65
 }
