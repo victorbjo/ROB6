@@ -10,6 +10,7 @@ class Node:
         self.cheapestBack = None
         self.heading = None
         self.headingBed = None
+        self.route = []
     def addConnection(self, newConnection):
         if isinstance(newConnection, list):
             self.connectedNodes = self.connectedNodes + newConnection

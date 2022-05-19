@@ -44,7 +44,7 @@ def makeLine(imgOld,node0 : Node, node1 : Node): # Creates line between two diff
             status =  solve.drawPath(newImage, node0, node1)
             if status is not False:
                 if checkLine(status, imgOld):
-                    print("Works")
+                    #print("Works")
                     #cv2.imshow("SOm", status)
                     #cv2.waitKey()
                     #imgOld = status.copy()

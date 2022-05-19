@@ -1,5 +1,8 @@
 {
     "drawRobot" : 1,
     "drawBed" : 0,
-    "showSteps": 0
+    "showSteps": 1,
+    "msPerFig" : 200,
+    "stepSize" : 30,
+    "maxAngleDelta" : 45
 }

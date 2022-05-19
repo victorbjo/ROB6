@@ -15,8 +15,8 @@ def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle, start
     x_r_t = [goalX,goalY]
     v_0 = startAngle
     v_t = goalAngle
-    print(startAngle, " ", startAngleBed)
-    print("ANGLES")
+    #print(startAngle, " ", startAngleBed)
+    #print("ANGLES")
     h_r_0 = [cos(radians(startAngleBed)).real, sin(radians(startAngleBed)).real]
     h_r_t = [cos(radians(v_t)).real, sin(radians(v_t)).real]
 
@@ -110,7 +110,7 @@ def drawPath(img, node0 : Node, node1 : Node):
     angle = findAngle(x0,y0,x1,y1)
     if angle < 0:
         angle+=360
-    if h0 > angle+45 or h0 < angle - 45:
+    if h0 > angle + config["maxAngleDelta"] or h0 < angle - config["maxAngleDelta"]:
         return False
     #print(x0, y0, x1, y1, h0, h1)
     #print(angle)
@@ -133,10 +133,11 @@ def drawPath(img, node0 : Node, node1 : Node):
             #pass
             bedH = -bedH
             robotH = -robotH
-        if config["drawRobot"] == 1:
-            drawTools.drawRect(nimg, bed, bedH, bedX*20, bedY*20)
         if config["drawBed"] == 1:
+            drawTools.drawRect(nimg, bed, bedH, bedX*20, bedY*20)
+        if config["drawRobot"] == 1:
             drawTools.drawRect(nimg, robot, robotH, robotX*20, robotY*20)
+        node1.route.append([robotX, robotY, robotH])
         cv2.imwrite("images/trailer/"+str(x)+".png", image)
     node1.headingBed = bedH
     #print("BedHead; RobHead " + str(node1.headingBed)+" " + str(node1.heading))
@@ -144,7 +145,7 @@ def drawPath(img, node0 : Node, node1 : Node):
     #print("Nodecheck")
     if config["showSteps"] == 1:
         cv2.imshow('image', nimg)
-        cv2.waitKey()
+        cv2.waitKey(config["msPerFig"])
     return nimg
 if __name__ == "__main__":
     print("Main")
