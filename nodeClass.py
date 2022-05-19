@@ -9,6 +9,7 @@ class Node:
         self.backPointer = []
         self.cheapestBack = None
         self.heading = None
+        self.headingBed = None
     def addConnection(self, newConnection):
         if isinstance(newConnection, list):
             self.connectedNodes = self.connectedNodes + newConnection

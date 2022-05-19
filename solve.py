@@ -10,12 +10,14 @@ x = Symbol('x')
 import cv2
 def norm(a, b):
     return simplify(sqrt((a**2) + (b**2)))
-def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle):
+def trajectoryGen(tf, startX, startY, goalX, goalY, startAngle, goalAngle, startAngleBed):
     x_r_0 = [startX,startY]
     x_r_t = [goalX,goalY]
     v_0 = startAngle
     v_t = goalAngle
-    h_r_0 = [cos(radians(v_0)).real, sin(radians(v_0)).real]
+    print(startAngle, " ", startAngleBed)
+    print("ANGLES")
+    h_r_0 = [cos(radians(startAngleBed)).real, sin(radians(startAngleBed)).real]
     h_r_t = [cos(radians(v_t)).real, sin(radians(v_t)).real]
 
     d = x_r_0[0]
@@ -97,6 +99,8 @@ image = cv2.imread('blank.png')
 compound = False
 compund = True
 def drawPath(img, node0 : Node, node1 : Node):
+    config = open("config.json")
+    config = json.load(config)
     x0 = node0.pos[0]/20
     y0 = node0.pos[1]/20
     x1 = node1.pos[0]/20
@@ -108,9 +112,12 @@ def drawPath(img, node0 : Node, node1 : Node):
         angle+=360
     if h0 > angle+45 or h0 < angle - 45:
         return False
-    print(x0, y0, x1, y1, h0, h1)
-    print(angle)
-    xBed, hBed, xRobot, hRobot = trajectoryGen(2, x0, y0, x1, y1, h0, h1)
+    #print(x0, y0, x1, y1, h0, h1)
+    #print(angle)
+    h0Bed = node0.headingBed
+    if h0Bed is None:
+        h0Bed = h1
+    xBed, hBed, xRobot, hRobot = trajectoryGen(2, x0, y0, x1, y1, h0, h1, h0Bed)
     nimg = img.copy()
     for x in range (len(xBed)-1):
         #nimg = img.copy()
@@ -126,11 +133,18 @@ def drawPath(img, node0 : Node, node1 : Node):
             #pass
             bedH = -bedH
             robotH = -robotH
-        #drawTools.drawRect(nimg, bed, bedH, bedX*20, bedY*20)
-        drawTools.drawRect(nimg, robot, robotH, robotX*20, robotY*20)
-        #cv2.imwrite("images/trailer/"+str(x)+".png", image)
-    #cv2.imshow('image', nimg)
-    #cv2.waitKey()
+        if config["drawRobot"] == 1:
+            drawTools.drawRect(nimg, bed, bedH, bedX*20, bedY*20)
+        if config["drawBed"] == 1:
+            drawTools.drawRect(nimg, robot, robotH, robotX*20, robotY*20)
+        cv2.imwrite("images/trailer/"+str(x)+".png", image)
+    node1.headingBed = bedH
+    #print("BedHead; RobHead " + str(node1.headingBed)+" " + str(node1.heading))
+    #print(node1)
+    #print("Nodecheck")
+    if config["showSteps"] == 1:
+        cv2.imshow('image', nimg)
+        cv2.waitKey()
     return nimg
 if __name__ == "__main__":
     print("Main")
