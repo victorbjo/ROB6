@@ -6,10 +6,20 @@ import json
 import os
 config = open("config.json")
 config = json.load(config)
+def getRoute(start : Node, goal : Node):
+    listToReturn = []
+    currentNode = goal
+    while True:
+        listToReturn.append(currentNode)
+        if currentNode == start:
+            listToReturn.reverse()
+            return listToReturn
+        currentNode = currentNode.backPointer
+'''
 map = cv2.imread("maps/hallwayCleaned.png")
 '''
 map = cv2.imread("maps/lab map.png")
-Nodes for lab map
+#Nodes for lab map
 n0 = Node("a",222,80)
 n0.heading = 0
 n1 = Node("b",340,80)
@@ -25,7 +35,8 @@ n3 = Node("e",650,422)
 n0.heading = 90
 n1.addConnection([n0, n2])
 n3.addConnection(n2)
-route = shortestRoute(n0,n1)
+'''
+route = shortestRoute(n0,n3)
 print(route)
 currentTree = []
 #for x in range(len(route)-1):
@@ -40,11 +51,14 @@ cv2.waitKey()
 print(currentTree)
 #route = shortestRoute(currentTree[0],currentTree[-1])
 print(currentTree[0][1].route)
+print(currentTree[0][-1].backPointer)
+currentTree : list[Node] = getRoute(currentTree[0][0], currentTree[0][-1])
+print(currentTree)
+print("FUCK")
 try:
     os.remove("route.txt")
 except:
     pass
 with open('route.txt', 'w') as fp:
-    for list in currentTree[0]:
-        for coordinateSet in list.route:
-            fp.write("%s\n" % coordinateSet)
+    for list in currentTree:
+        fp.write("[%s, %s, %s]\n" % list.pos[0], list.pos[1], list.heading)

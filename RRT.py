@@ -122,6 +122,7 @@ def RTT(node, goal, img, stepSize = 30):
                 print("Reached goal!!!")
             nodes.append(Node("Goal", goal.pos[0], goal.pos[1]))
             nodes[-1].addConnection(nodes[-2])
+            nodes[-1].backPointer = nodes[-2]
             return nodes 
 
 
