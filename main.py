@@ -30,6 +30,10 @@ print(route)
 currentTree = []
 #for x in range(len(route)-1):
 currentTree.append(RRT.RTT(route[0],route[-1],map, config["stepSize"]))
+'''
+for x in range(len(route)-1):
+    currentTree.append(RRT.RTT(route[x],route[x+1],map, config["stepSize"]))
+'''
 print(currentTree)
 cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", map)
 cv2.waitKey() 
