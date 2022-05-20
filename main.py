@@ -1,3 +1,4 @@
+from queue import Empty
 from dijkstra import shortestRoute
 from nodeClass import Node
 import RRT
@@ -61,4 +62,7 @@ except:
     pass
 with open('route.txt', 'w') as fp:
     for list in currentTree:
-        fp.write("[%s, %s, %s]\n" % list.pos[0], list.pos[1], list.heading)
+        if list.route == Empty:
+            continue
+        for number in list.route:
+            fp.write("%s\n" % number)
