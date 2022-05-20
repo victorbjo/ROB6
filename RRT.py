@@ -5,6 +5,9 @@ import cv2
 from nodeClass import Node
 from shapely import geometry as geo
 import solve
+import json
+config = open("config.json")
+config = json.load(config)
 def findAngle(x0, y0, x1, y1):
     delta_x = x1 - x0
     delta_y = y1 - y0
@@ -65,7 +68,7 @@ def getRPoint(img): #Takes the .shape of the img to get all the width and height
         randomX = random.randint(0, shape[0])
         randomY = random.randint(0, shape[1])
         valid = img[abs(randomX-1)][abs(randomY-1)][0] >= 250
-    return(randomY, abs(randomX-30))
+    return(randomY, abs(randomX))
 
 # Stepsize is the length between the start and end of a line
 
@@ -107,11 +110,13 @@ def RTT(node, goal, img, stepSize = 30):
         else:
             #print(i)
             triesCounter = 0
+            nodes[-1].backPointer = _nearestNode
             #cv2.imwrite("images/RRT"+str(i)+".png", img)      
             nodes[-1].addConnection(nodes[-2])
-        if nodes[-1].failedConnections > 20 and len(nodes) > 2:
-            nodes.pop()
-            nodes.pop()    
+        if nodes[-1].failedConnections > 20: #config["amountOfTries"]:
+            for i in range(2):
+                if (nodes[-1] != nodes[0]):
+                    nodes.pop() 
         if (mesaureDist(nodes[-1], goal) < stepSize): # If a node is within the stepSize distance of the goal node, a line will be created between the two nodes
             if makeLine(img, nodes[-1], goal):
                 print("Reached goal!!!")

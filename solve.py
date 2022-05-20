@@ -149,6 +149,8 @@ def drawPath(img, node0 : Node, node1 : Node):
         cv2.waitKey(config["msPerFig"])
         cv2.imwrite("images/"+str(int(tm.time()))+".png", nimg)
     return nimg
+
+    
 if __name__ == "__main__":
     print("Main")
     angle = findAngle(4.65, 6.65, 5.35, 6.55)#When making function make sure that all inputs above 180 be plussed with 360
