@@ -111,8 +111,9 @@ def drawPath(img, node0 : Node, node1 : Node):
     angle = findAngle(x0,y0,x1,y1)
     if angle < 0:
         angle+=360
-    if h0 > angle + config["maxAngleDelta"] or h0 < angle - config["maxAngleDelta"]:
-        return False
+    if config["useAngularConstraints"] == 1:
+        if h0 > angle + config["maxAngleDelta"] or h0 < angle - config["maxAngleDelta"]:
+            return False
     #print(x0, y0, x1, y1, h0, h1)
     #print(angle)
     h0Bed = node0.headingBed

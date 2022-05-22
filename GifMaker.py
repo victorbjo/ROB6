@@ -30,4 +30,4 @@ def makeGif(frame_folder, gifName, durationParam = 2): #Standard 20fps gif
     frame_one.save(gifName, format="GIF", append_images=frames,
                save_all=True, duration=fps, loop=0)
     print("I made a gif "+gifName)
-makeGif("images/Run 1 lab", "lab0.gif", 25)
+makeGif("images/Run 7 Tight Corner", "tightCorner.gif", 30)

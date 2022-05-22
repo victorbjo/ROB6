@@ -12,6 +12,7 @@ class Node:
         self.headingBed = None
         self.route = []
         self.failedConnections = 0
+        self.hasChild = False
     def addConnection(self, newConnection):
         if isinstance(newConnection, list):
             self.connectedNodes = self.connectedNodes + newConnection

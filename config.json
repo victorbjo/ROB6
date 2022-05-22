@@ -1,9 +1,11 @@
 {
     "drawRobot" : 1,
-    "drawBed" : 0,
+    "drawBed" : 1,
+    "useAngularConstraints" : 1,
     "showSteps": 1,
     "msPerFig" : 10,
     "stepSize" : 30,
-    "maxAngleDelta" : 55,
+    "goalRadius" : 20,
+    "maxAngleDelta" : 65,
     "amountOfTries" : 30
 }

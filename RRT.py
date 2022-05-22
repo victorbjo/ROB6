@@ -67,7 +67,8 @@ def getRPoint(img): #Takes the .shape of the img to get all the width and height
     while valid is False:
         randomX = random.randint(0, shape[0])
         randomY = random.randint(0, shape[1])
-        valid = img[abs(randomX-1)][abs(randomY-1)][0] >= 250
+        if img[abs(randomX-1)][abs(randomY-1)][0] > 250:
+            break
     return(randomY, abs(randomX))
 
 # Stepsize is the length between the start and end of a line
@@ -110,14 +111,24 @@ def RTT(node, goal, img, stepSize = 30):
         else:
             #print(i)
             triesCounter = 0
+            print(newCoords)
+            print(img[abs(newCoords[0]-1)][abs(newCoords[1]-1)][0])
             nodes[-1].backPointer = _nearestNode
+            _nearestNode.hasChild = True
             #cv2.imwrite("images/RRT"+str(i)+".png", img)      
             nodes[-1].addConnection(nodes[-2])
         if nodes[-1].failedConnections > 20: #config["amountOfTries"]:
             for i in range(2):
                 if (nodes[-1] != nodes[0]):
-                    nodes.pop() 
-        if (mesaureDist(nodes[-1], goal) < stepSize): # If a node is within the stepSize distance of the goal node, a line will be created between the two nodes
+                    nodes.pop()
+        '''
+                    nodesToDelete = []
+            for i in range(len(nodes)):
+                if (nodes[i] != nodes[0] and nodes[i].hasChild == False and nodes[i].failedConnections > config["amountOfTries"]):
+                    nodes[i].backPointer.hasChild = False
+                    nodes.pop(i) 
+                    ''' 
+        if (mesaureDist(nodes[-1], goal) < config["goalRadius"]): # If a node is within the stepSize distance of the goal node, a line will be created between the two nodes
             if makeLine(img, nodes[-1], goal):
                 print("Reached goal!!!")
             nodes.append(Node("Goal", goal.pos[0], goal.pos[1]))
@@ -128,12 +139,11 @@ def RTT(node, goal, img, stepSize = 30):
 
 if __name__ == "__main__":
     #print(findAngle(1,1,0,2))
-    img = cv2.imread("maps/mymap0.pgm")
-    imgOrig = cv2.imread("maps/mymap0.pgm")
-
-    startNode = Node("start", 60, 70)
-    goal = Node("goal", 134, 3160)
-    RTT(startNode,goal,img, 15)
+    img = cv2.imread("maps/lab map.png")
+    imgOrig = cv2.imread("maps/lab map.png")
+    startNode = Node("start", 222,80)
+    goal = Node("goal", 400,160)
+    RTT(startNode, goal, img, config["stepSize"])
     #getRPoint(img)
     cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", img)
     cv2.waitKey() 
