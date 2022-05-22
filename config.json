@@ -1,5 +1,5 @@
 {
-    "drawRobot" : 0,
+    "drawRobot" : 1,
     "drawBed" : 0,
     "useAngularConstraints" : 1,
     "showSteps": 1,
