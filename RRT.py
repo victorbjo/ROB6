@@ -108,14 +108,14 @@ def RTT(node, goal, img, stepSize = 30):
             nodes.pop(-1)                                                                                   # as the increment happens no matter what
             i = i - 1
             _nearestNode.failedConnections += 1
-            if _nearestNode.failedConnections > 20 and _nearestNode.hasChild == False:
+            if _nearestNode.failedConnections > 20 and _nearestNode.hasChild == False and _nearestNode.backPointer != [] :
                 _nearestNode.backPointer.hasChild = False
                 nodes.remove(_nearestNode)
         else:
             #print(i)
             triesCounter = 0
             print(newCoords)
-            print(img[abs(newCoords[0]-1)][abs(newCoords[1]-1)][0])
+            print(img[abs(newCoords[1]-1)][abs(newCoords[0]-1)][0])
             nodes[-1].backPointer = _nearestNode
             _nearestNode.hasChild = True
             #cv2.imwrite("images/RRT"+str(i)+".png", img)      

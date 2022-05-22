@@ -1,6 +1,6 @@
 {
-    "drawRobot" : 1,
-    "drawBed" : 1,
+    "drawRobot" : 0,
+    "drawBed" : 0,
     "useAngularConstraints" : 1,
     "showSteps": 1,
     "msPerFig" : 10,
@@ -9,3 +9,7 @@
     "maxAngleDelta" : 65,
     "amountOfTries" : 30
 }
+
+
+
+
