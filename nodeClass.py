@@ -4,10 +4,10 @@ class Node:
     def __init__(self, id, posX, posY):
         self.id = id
         self.pos = [posX, posY]
-        self.connectedNodes = []
+        self.connectedNodes : list[Node]= []
         self.accumCost = 0
         self.backPointer = []
-        self.cheapestBack = None
+        self.cheapestBack : Node = None
         self.heading = None
         self.headingBed = None
         self.route = []

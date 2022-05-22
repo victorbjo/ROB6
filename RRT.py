@@ -108,6 +108,9 @@ def RTT(node, goal, img, stepSize = 30):
             nodes.pop(-1)                                                                                   # as the increment happens no matter what
             i = i - 1
             _nearestNode.failedConnections += 1
+            if _nearestNode.failedConnections > 20 and _nearestNode.hasChild == False:
+                _nearestNode.backPointer.hasChild = False
+                nodes.remove(_nearestNode)
         else:
             #print(i)
             triesCounter = 0
@@ -120,6 +123,7 @@ def RTT(node, goal, img, stepSize = 30):
         if nodes[-1].failedConnections > 20: #config["amountOfTries"]:
             for i in range(2):
                 if (nodes[-1] != nodes[0]):
+                    nodes[-1].backPointer.hasChild = False
                     nodes.pop()
         '''
                     nodesToDelete = []
