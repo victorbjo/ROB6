@@ -6,6 +6,7 @@ from nodeClass import Node
 from shapely import geometry as geo
 import solve
 import json
+import time
 config = open("config.json")
 config = json.load(config)
 def findAngle(x0, y0, x1, y1):
@@ -98,7 +99,13 @@ def RTT(node, goal, img, stepSize = 30):
     nodes : list[Node] = [node]
     i = 0
     triesCounter = 0
+    count = 0
+    start = time.time()
     while i  < 500:
+        if count == 60:
+            print(str(60/(time.time()-start))," seconds for each node evaluated")
+        count = count + 1
+
         newCoords = getRPoint(img) # Stores coordinates in newCoords from the new generated point(using getRPoint on the map)
         _nearestNode = nearestNode(nodes, newCoords) # Measures distance too all generated nodes, takes the shortest distance and stores in _nearestnode variable
         x, y = createLineToNewPoint(_nearestNode, newCoords, stepSize) #generates a line to the new point and saves the new points coordinates as x, y
@@ -108,7 +115,7 @@ def RTT(node, goal, img, stepSize = 30):
             nodes.pop(-1)                                                                                   # as the increment happens no matter what
             i = i - 1
             _nearestNode.failedConnections += 1
-            if _nearestNode.failedConnections > 20 and _nearestNode.hasChild == False and _nearestNode.backPointer != [] :
+            if _nearestNode.failedConnections > 20 and _nearestNode.hasChild == False and _nearestNode != nodes[0] :
                 _nearestNode.backPointer.hasChild = False
                 nodes.remove(_nearestNode)
         else:

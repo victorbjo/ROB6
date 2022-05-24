@@ -140,7 +140,6 @@ def drawPath(img, node0 : Node, node1 : Node):
         if config["drawRobot"] == 1:
             drawTools.drawRect(nimg, robot, robotH, robotX*20, robotY*20)
         node1.route.append([robotX, robotY, robotH])
-        cv2.imwrite("images/trailer/"+str(x)+".png", image)
     node1.headingBed = bedH
     #print("BedHead; RobHead " + str(node1.headingBed)+" " + str(node1.heading))
     #print(node1)

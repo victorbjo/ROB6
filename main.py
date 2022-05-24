@@ -19,20 +19,24 @@ def getRoute(start : Node, goal : Node):
 
 map = cv2.imread("maps/hallwayCleaned.png")
 '''
+map = cv2.imread("maps/lab map.png")
 #Nodes for lab map
-n0 = Node("a",222,80)
-n0.heading = 0
+n0 = Node("a",240,83)
+
 n1 = Node("b",340,80)
 n2 = Node("c",380,125)
 n3 = Node("d",400,160)
 n2.addConnection([n1, n3])
 n1.addConnection(n0)
+n3.heading = 250
 '''
-n0 = Node("a",805,105)
+
+
+n0 = Node("a",48,350)
 n1 = Node("b",810,225)
 n2 = Node("c",810,415)
-n3 = Node("e",650,422)
-n0.heading = 90
+n3 = Node("e",350,35)
+n3.heading = 180
 n1.addConnection([n0, n2])
 n3.addConnection(n2)
 
@@ -45,9 +49,9 @@ n2 = Node("c",60,196)
 n3 = Node("e",50,380)
 n1.addConnection([n0, n2])
 n3.addConnection(n2)
-n0.heading = 90
+n3.heading = 270
 '''
-route = shortestRoute(n0,n3)
+route = shortestRoute(n3,n0)
 print(route)
 currentTree = []
 #for x in range(len(route)-1):

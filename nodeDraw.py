@@ -3,7 +3,7 @@ import json
 import numpy as np
 #image = cv2.imread("images/RunKinAndAngles.png")
 #image = cv2.imread("images/RunNoAngularConstraints.png")
-filename = "hallwayNoKinematic1.png"
+filename = "reverseVirtual2.png"
 image = cv2.imread(filename)
 shapes = np.zeros_like(image, np.uint8)
 radius = 20
@@ -12,8 +12,8 @@ config = open("config.json")
 config = json.load(config)
 color = (30, 30, 255)
 color2 = (80, 80, 80)
-point0 = (805,105)
-point1 = (650,422)
+point0 = (50,380)
+point1 = (220,60)
 image = cv2.circle(image, point0, 4, color, -1)
 image = cv2.circle(image, point1, 4, color, -1)
 cv2.circle(shapes, point1, 20, color2, 2)
