@@ -1,6 +1,6 @@
 {
     "drawRobot" : 1,
-    "drawBed" : 0,
+    "drawBed" : 1,
     "useAngularConstraints" : 1,
     "showSteps": 1,
     "msPerFig" : 10,

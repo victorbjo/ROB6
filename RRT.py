@@ -9,6 +9,19 @@ import json
 import time
 config = open("config.json")
 config = json.load(config)
+def smallest(val0, val1, mod = config["stepSize"]):
+    smallestVal = min(val0,val1)
+    smallestVal = smallestVal - mod
+    smallestVal = max(smallestVal, 0)
+    return smallestVal
+def biggest(val0, val1, limit, mod = config["stepSize"]):
+    biggestVal = max(val0,val1)
+    #print("EYO", biggestVal)
+    biggestVal = biggestVal + mod
+    #print("EYO1", biggestVal)
+    biggestVal = min(biggestVal, limit)
+    #print("EYO2", biggestVal)
+    return biggestVal
 def findAngle(x0, y0, x1, y1):
     delta_x = x1 - x0
     delta_y = y1 - y0
@@ -20,7 +33,23 @@ def mesaureDist(node0 : Node, node1 : Node): # Measure the distance between two 
     b = node1.pos[1]-node0.pos[1]
     b = b * b
     return abs(math.sqrt(a+b).real)
-def checkLine(imgNew, imgOld): # Check if the line on the current map is placed on a grey/dark pixel on the old map
+def checkLine(imgNew, imgOld, node0, node1): # Check if the line on the current map is placed on a grey/dark pixel on the old map
+    #print("FUCK")
+    lowX = smallest(node0.pos[0], node1.pos[0], 30)
+    highX = biggest(node0.pos[0], node1.pos[0], len(imgOld[0]), 30)
+    lowY = smallest(node0.pos[1], node1.pos[1], 30)
+    highY = biggest(node0.pos[1], node1.pos[1], len(imgOld), 30)
+    #cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", imgOld)
+    #cv2.waitKey() 
+    #print("FUCK1")
+    #270 400 0 87
+    #print("FUCK", node0.pos[0], node1.pos[0])
+    #print(lowX, highX, lowY, highY)
+    imgOld = imgOld[lowY:highY, lowX:highX]
+    imgNew = imgNew[lowY:highY, lowX:highX]
+    #print("FUCK2")
+    #cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", imgNew)
+    #cv2.waitKey() 
     for idx, row in enumerate(imgNew):
         for idy, pixel in enumerate(row):
             if (pixel[0] == 255):
@@ -47,7 +76,7 @@ def makeLine(imgOld,node0 : Node, node1 : Node): # Creates line between two diff
         try:
             status =  solve.drawPath(newImage, node0, node1)
             if status is not False:
-                if checkLine(status, imgOld):
+                if checkLine(status, imgOld, node0, node1):
                     #print("Works")
                     #cv2.imshow("SOm", status)
                     #cv2.waitKey()
@@ -103,7 +132,9 @@ def RTT(node, goal, img, stepSize = 30):
     start = time.time()
     while i  < 500:
         if count == 60:
-            print(str(60/(time.time()-start))," seconds for each node evaluated")
+            print(str((time.time()-start)/60)," seconds for each node evaluated")
+        elif count == 30:
+            print(str((time.time()-start)/30)," seconds for each node evaluated")
         count = count + 1
 
         newCoords = getRPoint(img) # Stores coordinates in newCoords from the new generated point(using getRPoint on the map)
@@ -145,6 +176,8 @@ def RTT(node, goal, img, stepSize = 30):
             nodes.append(Node("Goal", goal.pos[0], goal.pos[1]))
             nodes[-1].addConnection(nodes[-2])
             nodes[-1].backPointer = nodes[-2]
+            print(str((time.time()-start)/count)," seconds for each node evaluated")
+            print(time.time(), " TIME now, time start: ", start, ", Count: ", count)
             return nodes 
 
 
