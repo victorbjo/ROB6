@@ -34,22 +34,13 @@ def mesaureDist(node0 : Node, node1 : Node): # Measure the distance between two 
     b = b * b
     return abs(math.sqrt(a+b).real)
 def checkLine(imgNew, imgOld, node0, node1): # Check if the line on the current map is placed on a grey/dark pixel on the old map
-    #print("FUCK")
     lowX = smallest(node0.pos[0], node1.pos[0], 30)
     highX = biggest(node0.pos[0], node1.pos[0], len(imgOld[0]), 30)
     lowY = smallest(node0.pos[1], node1.pos[1], 30)
     highY = biggest(node0.pos[1], node1.pos[1], len(imgOld), 30)
-    #cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", imgOld)
-    #cv2.waitKey() 
-    #print("FUCK1")
-    #270 400 0 87
-    #print("FUCK", node0.pos[0], node1.pos[0])
-    #print(lowX, highX, lowY, highY)
+
     imgOld = imgOld[lowY:highY, lowX:highX]
     imgNew = imgNew[lowY:highY, lowX:highX]
-    #print("FUCK2")
-    #cv2.imshow("RRT algorithm from MiR Map - 2.5 meter clearance", imgNew)
-    #cv2.waitKey() 
     for idx, row in enumerate(imgNew):
         for idy, pixel in enumerate(row):
             if (pixel[0] == 255):

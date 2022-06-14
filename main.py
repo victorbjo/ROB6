@@ -73,7 +73,6 @@ print(currentTree[0][1].route)
 print(currentTree[0][-1].backPointer)
 currentTree : list[Node] = getRoute(currentTree[0][0], currentTree[0][-1])
 print(currentTree)
-print("FUCK")
 try:
     os.remove("route.txt")
 except:
